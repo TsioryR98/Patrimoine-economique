@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
 import './App.css';
+import Possession from '../../models/possessions/Possession';
 import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import DropdownButton from 'react-bootstrap/DropdownButton';      
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
+import datas from "../../data/data1";
+import Table from 'react-bootstrap/Table';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 export function App(props) {
 
 const [textBiensMateriel, setTextBiensMateriel] = useState('');
 const [textPossesseur, setTextPossesseur] = useState('');
 const [textDepense, setTextDepense] = useState('');
-//const [firstRowValues, setFirstRowValues] = useState(Array.from({ length: 6 }, () => ''));
 const [accountType, setAccountType] = useState('Espèces');
 const [cashAmount, setCashAmount] = useState('');
 const [cashInterest, setCashInterest] = useState('');
 const [acquisitionDate, setAcquisitionDate] = useState(null);
+const [calculDate, setCalculDate] = useState(null);
 const [materialAmount, setMaterialAmount] = useState('');
 const [depreciationRate, setDepreciationRate] = useState('');
+const [patrimoineFinal,setPatrimoineFinal] = useState(0);
 
-/*const handleFirstRowInputChange = (index, value) => {
-const newValues = [...firstRowValues];
-newValues[index] = value;
-setFirstRowValues(newValues);
-};
-*/ 
+
 
 const handleAccountTypeChange = (eventKey) => {
 setAccountType(eventKey);
@@ -38,24 +39,69 @@ const handleDepenseChange = (e) => setTextDepense(e.target.value);
 const handleMaterialAmountChange = (e) => setMaterialAmount(e.target.value);
 const handleDepreciationRateChange = (e) => setDepreciationRate(e.target.value);
 
-const handleSubmitArgent = () => {
-// traiter l'ajout d'argent
-};
-const handleSubmitBienMateriel = () => {
-//l'ajout d'un bien matériel
-};
-const handleSubmitTrainDeVie = () => {
-//l'ajout d'une dépense
-};
 
-return <><div className='m-4'>
-          <h1>PATRIMOINE</h1>
+return <> {/* TABLEAU DE POSSESSSION */}  <h1>PATRIMOINE</h1>
+
+        <div className='container-fluid mt-4'>
+            <h2>Liste de Patrimoines</h2>
+            <Table striped bordered hover variant="ligth">
+                    <thead>
+                        <tr>
+                            <th>Nom du Possesseur</th>
+                            <th>Libellé</th>
+                            <th>Valeur</th>
+                            <th>Date Début</th>
+                            <th>Date Fin</th>
+                            <th>Taux d'Amortissement</th>
+                            <th>Valeur Constante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {datas.map((dataPossession, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{dataPossession.possesseur.nom}</td>
+                                    <td>{dataPossession.libelle}</td>
+                                    <td>{dataPossession.valeur}</td>
+                                    <td>{new Date(dataPossession.dateDebut).toLocaleDateString()}</td>
+                                    <td>{dataPossession.dateFin ? new Date(dataPossession.dateFin).toLocaleDateString() : 'N/A'}</td>
+                                    <td>{dataPossession.tauxAmortissement !== null ? `${dataPossession.tauxAmortissement}%` : 'N/A'}</td>
+                                    <td>{dataPossession.valeurConstante !== null ? dataPossession.valeurConstante : 'N/A'}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </Table >
+            </div>
+
+                  <div>
+                        <label htmlFor="selectDate">Sélectionner une date :</label>
+                        <DatePicker
+                              selected={calculDate}
+                              onChange={(date) => setCalculDate   (date)}
+                              dateFormat="dd/MM/yyyy"
+                              className="form-control"
+                              placeholderText='Choisir date'
+                        />
+                  </div>
+                <div className='patrimoineValue mt-4'>
+                     <input 
+                        type="text"
+                        id="libelléPossesseur"
+                        className="form-control"
+                        value={patrimoineFinal}
+                        onChange={handlePossesseurChange}
+                        placeholder="Nom"
+                  />
+                   <button className="btn btn-success mt-4" >Calculer la patrimoine</button>
                </div>
-          
+
+            <h2 className='mt-4'>Gestion de Patrimoines</h2>
                 <div className="container">
+
                                       {/* CLASSE POSSESSEUR */}
-                <div className="m-4 mb-3">
-          <h5>POSSESSEUR</h5>
+            <div className="m-4 mb-3">
+                  <h5>POSSESSEUR</h5>
                 <div className="mb-2">
                         <label htmlFor="libelléPossesseur" className="form-label">Possesseur:</label>
                 <input 
@@ -67,7 +113,6 @@ return <><div className='m-4'>
                   placeholder="Nom"
                   />
                </div>
-          <button className="btn btn-success" onClick={handleSubmitTrainDeVie}>Ajouter</button>
                </div>
           
                                       {/* CLASSE ARGENT */}
@@ -107,7 +152,6 @@ return <><div className='m-4'>
           />
                </div>
           
-             <button className="btn btn-success" onClick={handleSubmitArgent}>Ajouter</button>
                </div>
           
                                       {/* CLASSE BIEN MATERIEL */}
@@ -129,12 +173,13 @@ return <><div className='m-4'>
                 <div className="mb-1">
           <label htmlFor="dateInput" className="form-label">Date mise en usage</label>
                 <div className="mt-2">
-          <DatePicker
-          selected={acquisitionDate}
-          onChange={(date) => setAcquisitionDate(date)}
-          dateFormat="dd/MM/yyyy"
-          className="form-control"
-          />
+                   <DatePicker
+                   selected={acquisitionDate}
+                   onChange={(date) => setAcquisitionDate(date)}
+                   dateFormat="dd/MM/yyyy"
+                   className="form-control"
+                   placeholderText='Choisir date'
+                   />
                </div>
                </div>
           
@@ -162,7 +207,6 @@ return <><div className='m-4'>
           />
                </div>
           
-          <button className="btn btn-success" onClick={handleSubmitBienMateriel}>Ajouter</button>
                </div>
           
                                       {/* CLASSE TRAIN DE VIE */}
@@ -192,9 +236,9 @@ return <><div className='m-4'>
           />
                </div>
           
-          <button className="btn btn-success" onClick={handleSubmitTrainDeVie}>Ajouter</button>
                </div>
-               </div>
+               <button className="btn btn-success" >Ajouter</button>
+      </div>
  </>
  }
           

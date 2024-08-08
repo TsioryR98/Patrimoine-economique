@@ -1,0 +1,20 @@
+[
+          {
+            "possesseur": { "nom": "John Doe" },
+            "libelle": "AirPod Pro",
+            "valeur": 4000000,
+            "dateDebut": "2023-12-25T00:00:00.000Z",
+            "dateFin": null,
+            "tauxAmortissement": 5
+          },
+          {
+            "possesseur": { "nom": "John Doe" },
+            "libelle": "MacBook Pro",
+            "valeur": 2000000,
+            "dateDebut": "2023-12-25T00:00:00.000Z",
+            "dateFin": null,
+            "tauxAmortissement": 5
+          }
+          
+
+]

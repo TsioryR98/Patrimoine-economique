@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import './App.css'
+import './App.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import 'bootstr     ap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
-import 'react-datepick      er/dist/react-datepicker.css';
 
 export function App(props) {
 

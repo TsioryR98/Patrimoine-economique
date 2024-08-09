@@ -1,17 +1,11 @@
-#root {
-  max-width: 1280px;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-left: 2vw;
-
+#root{
+    margin-left: 4vw;
 }
-.table th{
-  font-weight: 400;
+.dateSelect{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
-.table{
-  width: 100%;
-
+.finalValue{
+    font-size:xx-large;
 }
-.container{
-  margin-left: 0;
-}
-

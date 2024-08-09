@@ -5,9 +5,12 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';      
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
-import datas from "../../data/data1";
 import Table from 'react-bootstrap/Table';
 import 'react-datepicker/dist/react-datepicker.css';
+import data from '../../data/data.json';
+import Patrimoine from '../../models/Patrimoine.js';  
+import Flux from "../../models/possessions/Flux.js";
+import Button from 'react-bootstrap/Button';
 
 
 export function App(props) {
@@ -19,16 +22,45 @@ const [accountType, setAccountType] = useState('Espèces');
 const [cashAmount, setCashAmount] = useState('');
 const [cashInterest, setCashInterest] = useState('');
 const [acquisitionDate, setAcquisitionDate] = useState(null);
-const [calculDate, setCalculDate] = useState(null);
 const [materialAmount, setMaterialAmount] = useState('');
 const [depreciationRate, setDepreciationRate] = useState('');
-const [patrimoineFinal,setPatrimoineFinal] = useState(0);
+
+const actualDay = new Date(Date.now());
+const possessions = data[1].data.possessions;
+const [selectUpdateDate, setSelectUpdateDate] = useState(null);
+const [patrimoineCalcul, setPatrimoineCalcul] = useState(0);
 
 
 
 const handleAccountTypeChange = (eventKey) => {
 setAccountType(eventKey);
 };
+
+const calculatePatrimoineCalcul = () => {
+      if (selectUpdateDate) {
+      const possessionExtract = possessions.map(item =>
+            item.jour ? new Flux(
+            item.possesseur,
+            item.libelle,
+            item.valeurConstante,
+            new Date(item.dateDebut),
+            item.dateFin ? new Date(item.dateFin) : null,
+            item.tauxAmortissement,
+            item.jour
+      ) : new Possession(
+            item.possesseur,
+            item.libelle,
+            item.valeur,
+            new Date(item.dateDebut),
+            item.dateFin ? new Date(item.dateFin) : null,
+            item.tauxAmortissement
+      )
+      );
+      const patrimoine = new Patrimoine("John Doe", possessionExtract);
+      const patValue = patrimoine.getValeur(selectUpdateDate);
+      setPatrimoineCalcul(patValue);
+      }
+}
 
 // Fonctions onChange regroupées
 const handlePossesseurChange = (e) => setTextPossesseur(e.target.value);
@@ -42,59 +74,80 @@ const handleDepreciationRateChange = (e) => setDepreciationRate(e.target.value);
 
 return <> {/* TABLEAU DE POSSESSSION */}  <h1>PATRIMOINE</h1>
 
-        <div className='container-fluid mt-4'>
             <h2>Liste de Patrimoines</h2>
-            <Table striped bordered hover variant="ligth">
-                    <thead>
-                        <tr>
-                            <th>Nom du Possesseur</th>
-                            <th>Libellé</th>
-                            <th>Valeur</th>
-                            <th>Date Début</th>
-                            <th>Date Fin</th>
-                            <th>Taux d'Amortissement</th>
-                            <th>Valeur Constante</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {datas.map((dataPossession, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{dataPossession.possesseur.nom}</td>
-                                    <td>{dataPossession.libelle}</td>
-                                    <td>{dataPossession.valeur}</td>
-                                    <td>{new Date(dataPossession.dateDebut).toLocaleDateString()}</td>
-                                    <td>{dataPossession.dateFin ? new Date(dataPossession.dateFin).toLocaleDateString() : 'N/A'}</td>
-                                    <td>{dataPossession.tauxAmortissement !== null ? `${dataPossession.tauxAmortissement}%` : 'N/A'}</td>
-                                    <td>{dataPossession.valeurConstante !== null ? dataPossession.valeurConstante : 'N/A'}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table >
-            </div>
+            <Table striped bordered hover className='text-center'>
+               <thead>
+                  <tr>
+                  <th>#</th>
+                  <th>Libelle</th>
+                  <th>Valeur initiale</th>
+                  <th>Date de début</th>
+                  <th>Date de fin</th>
+                  <th>Amortissement</th>
+                  <th>Valeur Actuelle</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {possessions.map((item, index) => {
+                      const possession = item.jour
+                      ? new Flux(
+                      item.possesseur,
+                      item.libelle,
+                      item.valeurConstante,
+                      new Date(item.dateDebut),
+                      item.dateFin ? new Date(item.dateFin) : null,
+                      item.tauxAmortissement,
+                      item.jour
+                  )
+               : new Possession(
+                      item.possesseur,
+                      item.libelle,
+                      item.valeur,
+                      new Date(item.dateDebut),
+                      item.dateFin ? new Date(item.dateFin) : null,
+                      item.tauxAmortissement
+                      );
+               const actualValues = possession.getValeur(actualDay);
 
-                  <div>
-                        <label htmlFor="selectDate">Sélectionner une date :</label>
-                        <DatePicker
-                              selected={calculDate}
-                              onChange={(date) => setCalculDate   (date)}
-                              dateFormat="dd/MM/yyyy"
-                              className="form-control"
-                              placeholderText='Choisir date'
-                        />
-                  </div>
-                <div className='patrimoineValue mt-4'>
-                     <input 
-                        type="text"
-                        id="libelléPossesseur"
-                        className="form-control"
-                        value={patrimoineFinal}
-                        onChange={handlePossesseurChange}
-                        placeholder="Nom"
-                  />
-                   <button className="btn btn-success mt-4" >Calculer la patrimoine</button>
+        return (
+               <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{item.libelle}</td>
+                  <td>{item.valeur}</td>
+                  <td>{new Date(item.dateDebut).toLocaleDateString()}</td>
+                  <td>{item.dateFin ? new Date(item.dateFin).toLocaleDateString() : "-"}</td>
+                  <td>{item.tauxAmortissement ? item.tauxAmortissement : "-"}</td>
+                  <td>{ Math.round(actualValues).toLocaleString()}<span> Ar</span></td>
+               </tr>
+               );
+               })}
+               </tbody>
+       </Table>
+ 
+               <div className="mb-1">
+          <label htmlFor="dateInput" className="form-label">Choisir la date de la mise à jour :</label>
+                <div className="mt-2">
+                   <DatePicker
+                   selected={selectUpdateDate}
+                   onChange={(date) => setSelectUpdateDate(date)}
+                   dateFormat="dd/MM/yyyy"
+                   className="form-control"
+                   placeholderText='Date de mise à jour'
+                   />
                </div>
+               </div>
+
+               <div className='mt-4 mb-4'>
+               <Button variant="success" onClick={calculatePatrimoineCalcul}>Mise à jour Patrimoine</Button>
+               </div>
+                  <div className='calcResult'>
+                         <p>Valeur du Patrimoine à date : </p><strong className='finalValue'>{Math.round(patrimoineCalcul).toLocaleString()} </strong> Ariary
+               </div>
+               
+               
+
+  {/* GESTION PATRIMOINE */}
+
 
             <h2 className='mt-4'>Gestion de Patrimoines</h2>
                 <div className="container">

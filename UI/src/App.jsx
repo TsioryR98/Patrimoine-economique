@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import './App.css';
-import Possession from '../../models/possessions/Possession';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';      
-import 'bootstrap/dist/css/bootstrap.min.css';
-import DatePicker from 'react-datepicker';
-import Table from 'react-bootstrap/Table';
+import React, { useState } from "react";
+import "./App.css";
+import Possession from "../../models/possessions/Possession";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import "bootstrap/dist/css/bootstrap.min.css";
+import DatePicker from "react-datepicker";
+import Table from "react-bootstrap/Table";
 import "react-datepicker/dist/react-datepicker.css";
 import data from "../../data/data.json";
 import Patrimoine from "../../models/Patrimoine.js";
@@ -110,7 +110,7 @@ export function App(props) {
             const actualValues = possession.getValeur(actualDay);
 
             return (
-              <tr key={index}>
+              <tr>
                 <td>{index + 1}</td>
                 <td>{item.libelle}</td>
                 <td>{item.valeur}</td>
@@ -147,7 +147,7 @@ export function App(props) {
         </div>
       </div>
       <div className="mt-4 mb-4">
-        <Button variant="success" onClick={calculatePatrimoineCalcul}>
+        <Button onClick={calculatePatrimoineCalcul}>
           Mise à jour Patrimoine
         </Button>
       </div>
@@ -158,7 +158,7 @@ export function App(props) {
         </strong>{" "}
         Ariary
       </div>
-      {/* GESTION PATRIMOINE */}
+      {/* *************** GESTION PATRIMOINE ************************/}
       <h2 className="mt-4">Gestion de Patrimoines</h2>
       <div className="container">
         {/* CLASSE POSSESSEUR */}
@@ -325,6 +325,5 @@ export function App(props) {
     </>
   );
 }
-          
+
 export default App;
-                                

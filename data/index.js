@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 
-async function readFile(path) {
+export async function readFile(path) {
   try {
     const data = await fs.readFile(path, { encoding: "utf8" });
     return {
@@ -15,7 +15,7 @@ async function readFile(path) {
   }
 }
 
-async function writeFile(path, data) {
+export async function writeFile(path, data) {
   try {
     await fs.writeFile(path, JSON.stringify(data), {
       encoding: "utf8",
@@ -30,5 +30,3 @@ async function writeFile(path, data) {
     };
   }
 }
-
-export { readFile, writeFile };

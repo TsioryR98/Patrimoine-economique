@@ -12,7 +12,8 @@
   "dependencies": {
     "chai": "^5.1.1",
     "express": "^4.19.2",
-    "mocha": "^10.7.0"
+    "mocha": "^10.7.0",
+    "vite": "^5.4.2"
   },
   "devDependencies": {
     "prettier": "3.3.3"

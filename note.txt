@@ -27,7 +27,7 @@
         - Menu Patrimoine => Page patrimoine
         - Menu Possessions => Page List Possession 
     -  Page Patrimoine (/patrimoine)
-        - Chart:
+        -                                               :
             - DatePicker dateDebut, DatePicker dateFin, Select Jour
             - Button: Validate => onClick -> Get Valeur Patrimoine by Range with Jour
             - Line Chart (Chart.js) 

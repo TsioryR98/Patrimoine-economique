@@ -12,3 +12,9 @@ Pour que l'interface utilisateur située dans le dossier `/UI` fonctionne correc
    ```bash
    npm install vite@latest
    ```
+3. Dans `/UI`
+
+```bash
+   npm run dev
+
+```

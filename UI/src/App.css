@@ -1,11 +1,39 @@
-#root{
-    margin-left: 4vw;
+#root {
+  width: 100%;
+  font-size: 16px;
 }
-.dateSelect{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.dateSelect {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.finalValue{
-    font-size:xx-large;
+.finalValue {
+  font-size: xx-large;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+.content-container {
+  padding: 1rem;
+}
+.container {
+  width: 100%;
+}
+.navbar {
+  width: 100%;
+}
+.brand {
+  font-size: 1.65rem;
+}
+.create-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4vh;
+}
+.links {
+  font-size: 1.25rem;
 }

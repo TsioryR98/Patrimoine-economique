@@ -1,0 +1,14 @@
+# Installation des Dépendances UI
+
+Pour que l'interface utilisateur située dans le dossier `/UI` fonctionne correctement, suivez les étapes ci-dessous pour installer les dépendances nécessaires.
+
+## Étapes d'Installation
+
+1. Accédez au dossier `/UI` :
+   ```bash
+   cd UI
+   ```
+2. Installez les dépendances, y compris la dernière version compatible de vite dans /UI
+   ```bash
+   npm install vite@latest
+   ```

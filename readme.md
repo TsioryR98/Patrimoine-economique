@@ -16,5 +16,12 @@ Pour que l'interface utilisateur située dans le dossier `/UI` fonctionne correc
 
 ```bash
    npm run dev
-
 ```
+
+4. Installez les dépendances, y compris la dernière version compatible de nodemon dans /Backend pour lancer en liveServer
+   ```bash
+   npm install nodemon
+   ```
+   ```bash
+   npm run devstart
+   ```

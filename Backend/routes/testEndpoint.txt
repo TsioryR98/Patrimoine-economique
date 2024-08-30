@@ -1,0 +1,170 @@
+router.get("/", async (req, res) => {
+  try {
+    const dataBase = await readFile(dataBasePath);
+
+    if (dataBase.status === "OK") {
+      res.json(dataBase.data[1].data.possessions);
+    } else {
+      res.status(500).json({
+        message: "Erreur de lecture des données",
+        error: dataBase.error,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la lecture des données",
+      error: error.message,
+    });
+  }
+});
+
+
+router.post("/", async (req, res) => {
+  try {
+    const newPossession = req.body;
+    const dataBase = await readFile(dataBasePath);
+
+    if (dataBase.status === "OK") {
+      const data = dataBase.data;
+      data[1].data.possessions.push(newPossession);
+
+      const writeInData = await writeFile(dataBasePath, data);
+      if (writeInData.status === "OK") {
+        res.status(201).json(newPossession);
+      } else {
+        res.status(500).json({
+          message: "Erreur lors de l'ecriture des données",
+          error: writeInData.error,
+        });
+      }
+    } else {
+      res.status(500).json({
+        message: "Erreur de lecture des données",
+        error: dataBase.error,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la lecture des données",
+      error: error.message,
+    });
+  }
+});
+
+
+router.post("/create", async (req, res) => {
+  const { libelle, valeur, dateDebut, taux, possesseur } = req.body;
+
+  try {
+    const dataBase = await readFile(dataBasePath);
+    if (dataBase.status !== "OK") {
+      return res.status(500).json({ error: "Échec de la lecture des données" });
+    }
+    const data = dataBase.data;
+    data[1].data.possessions.push({
+      possesseur,
+      libelle,
+      valeur,
+      dateDebut,
+      taux,
+      dateFin: null,
+    });
+
+    const dataWrite = await writeFile(dataBasePath, data);
+    if (dataWrite.status !== "OK") {
+      return res.status(500).json({ error: "Échec de l'écriture des données" });
+    }
+
+    res.status(201).json({ message: "creation OK", possession: req.body });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la lecture des données",
+      error: error.message,
+    });
+  }
+});
+
+
+router.get("/:libelle", async (req, res) => {
+  try {
+    const { libelle } = req.params;
+    const dataBase = await readFile(dataBasePath);
+
+    if (dataBase.status === "OK") {
+      const data = dataBase.data;
+      const possession = data[1].data.possessions.find(
+        (p) => p.libelle === libelle
+      );
+      if (possession) {
+        console.log(`Possession trouvée: ${JSON.stringify(possession)}`);
+        res.status(200).json(possession);
+      } else {
+        console.log(`Possession non trouvée pour le libelle: ${libelle}`);
+        res.status(404).json({ message: "Possession introuvable" });
+      }
+    } else {
+      res.status(500).json({
+        message: "Erreur de lecture des données",
+        error: dataBase.error,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la lecture des données",
+      error: error.message,
+    });
+  }
+});
+
+
+
+// Get possession list
+/*
+async function getPossessions() {
+  const dataBase = await readFile(dataBasePath);
+  if (dataBase.status === "OK") {
+    return result.data
+      .filter((item) => item.model === "Patrimoine")
+      .map((item) => item.data.possessions)
+      .flat();
+  }
+  return [];
+}
+
+router.get("/", async (req, res) => {
+  try {
+    const possessions = await getPossessions();
+    const filteredPossessions = possessions.filter(
+      (possession) => possession.valeur > 0
+    );
+    res.status(200).json(filteredPossessions);
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la lecture des données",
+      error: error.message,
+    });
+  }
+});
+*/
+
+
+app.delete('/possession/:nom/:id', (req, res) => {
+    const { nom, id } = req.params;   
+    const parsedId = parseInt(id);
+    fs.readFile(path, "utf8", (err, data) => {
+        if (err) {
+            return res.status(500).send("Error reading file");
+        }
+        let jsonData = JSON.parse(data);
+        const patrimoine = jsonData.find(item => item.model === "Patrimoine");
+        patrimoine.data.possessions = patrimoine.data.possessions.filter(
+            possession => !(possession.possesseur.nom === nom && possession.id === parsedId)
+        );
+        fs.writeFile(path, JSON.stringify(jsonData, null, 2), (err) => {
+            if (err) {
+                return res.status(500).send("Error writing file");
+            }
+            res.status(200).send("Possession supprimée avec succès");
+        });
+    });
+});

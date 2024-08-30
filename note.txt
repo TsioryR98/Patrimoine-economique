@@ -11,7 +11,7 @@
     - /possession: Get Possession list
     - /possession: Create Possession: [libelle, valeur, dateDebut, taux]
     - /possession/:libelle: Update Possession by libelle: [libelle, dateFin]
-    - /possession/:libelle/close: Close Possession => set dateFin to current Date
+    -           : Close Possession => set dateFin to current Date
     - /patrimoine/:date: Get Valeur Patrimoine: [Date] => Valeur
     - /patrimoine/range: 
       {
@@ -21,7 +21,7 @@
         jour: xx
       }
       Get Valeur Patrimoine Range: [DateDebut, DateFin, Jour, type] => Valeur Patrimoine between dateDebut - dateFin by type=month
-
+                    
     - UI (React JS):
     -  Header: 
         - Menu Patrimoine => Page patrimoine

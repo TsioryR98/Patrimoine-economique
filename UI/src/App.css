@@ -30,8 +30,8 @@
 }
 .create-button {
   display: flex;
-  justify-content: center;
-  align-items: center;
+
+  margin-bottom: 4vh;
   margin-top: 4vh;
 }
 .links {

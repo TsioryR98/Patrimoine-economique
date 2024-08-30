@@ -1,10 +1,10 @@
 import express from "express";
-import path from "path";
 import { postRouter } from "./routes/patrimoinePost.js";
+import cors from "cors";
 
 const app = express();
 const port = 5001;
-
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {

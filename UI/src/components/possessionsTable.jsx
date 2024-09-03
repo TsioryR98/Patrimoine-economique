@@ -20,7 +20,7 @@ export default function possessionsTable() {
     tauxAmortissement: "",
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:5001/possession");

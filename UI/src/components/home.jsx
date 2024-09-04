@@ -45,9 +45,18 @@ const homePage = () => {
           <p>Build your wealth with confidence and achieve your financial goals through effective management.
           Your assets deserve the best care. 
           </p>
+          <div className="home-link">
+          <Link to="/patrimoine">
           <Button variant="success" className="home-button">
-            Get Started
-          </Button>
+          Patrimoine
+          </Button>{' '}
+          </Link>
+          <Link to="/possession">
+          <Button variant="outline-success" className="home-button custom">
+          Possession
+          </Button>{' '}
+          </Link>
+          </div>
         </div>
       </div>
     </>

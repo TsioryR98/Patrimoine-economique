@@ -1,15 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-body {
+body{
   margin: 0;
   width: 100%;
   height: 100vh;
   display: block; 
   font-family: "Montserrat", sans-serif;
+  color: white;
 }
 .home-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: 
+  linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* Dégradé noir semi-transparent */
+  url('../assets/homeCalc.jpg');
+  background-size: cover; 
+  background-repeat: no-repeat; 
+
 }
 .home-page {
   flex: 1; 
@@ -22,12 +29,12 @@ body {
   
 }
   .brand{
-    font-size: 1.75rem;
+    font-size: 1.35rem;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 300;
   }
   .links{
-    font-size: 1.45rem;
+    font-size: 1.15rem;
 
   }
   .navbar-position{
@@ -41,8 +48,19 @@ body {
   .home-page h2{
     font-size: 2.7rem;
     font-weight: 600;
-    margin-bottom: 2.8rem;
   }
   .home-button{
     width: 25%;
+    color: white;
+  }
+  .navbar {
+    background-color: transparent !important; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  
+  .navbar .nav-link {
+    color: white; 
+  }
+  .custom:hover{
+    background-color: rgba(0, 128, 0, 0.6);
   }

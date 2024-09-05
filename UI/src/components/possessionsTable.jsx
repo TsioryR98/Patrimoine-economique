@@ -102,73 +102,74 @@ export default function possessionsTable() {
 
   return (
     <>
-      <h1>PATRIMOINE</h1>
-      <h4>Liste de Patrimoines</h4>
-      <div className="create-button">
-        <Button variant="success" onClick={handleSubmit}>
-          Create Patrimoine
-        </Button>
-      </div>
-      <Table striped bordered hover className="text-center" variant="light">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Libelle</th>
-            <th>Valeur initiale</th>
-            <th>Date de début</th>
-            <th>Date de fin</th>
-            <th>Amortissement</th>
-            <th>valeurActuelle</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listPossession.map((item, index) => (
-            <tr key={index} className="text-center">
-              <td>{index + 1}</td>
-              <td>{item.libelle}</td>
-              <td>{item.valeur}</td>
-              <td className="text-center">
-                {new Date(item.dateDebut).toLocaleDateString()}
-              </td>
-              <td className="text-center">
-                {item.dateFin
-                  ? new Date(item.dateFin).toLocaleDateString()
-                  : "-"}
-              </td>
-              <td className="text-center">
-                {item.tauxAmortissement ? item.tauxAmortissement + "%" : "0%"}
-              </td>
-              <td>{item.valeurActuelle}</td>
-              {/*action */}
-              <td className="text-center action">
-                <Button
-                  variant="primary"
-                  className="me-1"
-                  onClick={() => handleEdit(item)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="warning"
-                  className="me-1"
-                  onClick={() => handleClose(item.libelle)}
-                >
-                  Close
-                </Button>
-                <Button
-                  variant="danger"
-                  className="me-1"
-                  onClick={() => handleDelete(item.libelle)}
-                >
-                  Delete
-                </Button>
-              </td>
+      <div className="p-4">
+        <h1>PATRIMOINE</h1>
+        <h4>Liste de Patrimoines</h4>
+        <div className="create-button">
+          <Button variant="success" onClick={handleSubmit}>
+            Create Patrimoine
+          </Button>
+        </div>
+        <Table striped bordered hover className="text-center" variant="light">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Libelle</th>
+              <th>Valeur initiale</th>
+              <th>Date de début</th>
+              <th>Date de fin</th>
+              <th>Amortissement</th>
+              <th>valeurActuelle</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-
+          </thead>
+          <tbody>
+            {listPossession.map((item, index) => (
+              <tr key={index} className="text-center">
+                <td>{index + 1}</td>
+                <td>{item.libelle}</td>
+                <td>{item.valeur}</td>
+                <td className="text-center">
+                  {new Date(item.dateDebut).toLocaleDateString()}
+                </td>
+                <td className="text-center">
+                  {item.dateFin
+                    ? new Date(item.dateFin).toLocaleDateString()
+                    : "-"}
+                </td>
+                <td className="text-center">
+                  {item.tauxAmortissement ? item.tauxAmortissement + "%" : "0%"}
+                </td>
+                <td>{item.valeurActuelle}</td>
+                {/*action */}
+                <td className="text-center action">
+                  <Button
+                    variant="primary"
+                    className="me-1"
+                    onClick={() => handleEdit(item)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="warning"
+                    className="me-1"
+                    onClick={() => handleClose(item.libelle)}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="danger"
+                    className="me-1"
+                    onClick={() => handleDelete(item.libelle)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       {/* Modal UPdate*/}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>

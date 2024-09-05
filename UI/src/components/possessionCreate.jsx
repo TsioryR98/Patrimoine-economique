@@ -74,7 +74,7 @@ const PatrimonyManagement = () => {
           </div>
         </div>
           */}
-        {/* CLASSE BIEN MATERIEL */}
+
         <div className="m-2 mb-3">
           <h5>BIENS </h5>
 

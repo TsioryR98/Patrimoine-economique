@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import Possession from "../../../models/possessions/Possession.js";
-import Flux from "../../../models/possessions/Flux.js";
-import Patrimoine from "../../../models/Patrimoine.js";
+import Possession from "../../src/models/possessions/Possession.js";
+import Flux from "../../src/models/possessions/Flux.js";
+import Patrimoine from "../../src/models/Patrimoine.js";
 import data from "../../../data/data.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DatePicker from "react-datepicker";
@@ -43,31 +43,33 @@ const patrimoineCalculates = () => {
   };
   return (
     <>
-      <div className="mb-1">
-        <label htmlFor="dateInput" className="form-label">
-          Choisir la date de la mise à jour :
-        </label>
-        <div className="mt-2">
-          <DatePicker
-            selected={selectUpdateDate}
-            onChange={(date) => setSelectUpdateDate(date)}
-            dateFormat="dd/MM/yyyy"
-            className="form-control"
-            placeholderText="Date de mise à jour"
-          />
+      <div className="p-4">
+        <div className="mb-1">
+          <label htmlFor="dateInput" className="form-label">
+            Choisir la date de la mise à jour :
+          </label>
+          <div className="mt-2">
+            <DatePicker
+              selected={selectUpdateDate}
+              onChange={(date) => setSelectUpdateDate(date)}
+              dateFormat="dd/MM/yyyy"
+              className="form-control"
+              placeholderText="Date de mise à jour"
+            />
+          </div>
         </div>
-      </div>
-      <div className="mt-4 mb-4">
-        <Button onClick={calculatePatrimoineCalcul}>
-          Mise à jour Patrimoine
-        </Button>
-      </div>
-      <div className="calcResult">
-        <p>Valeur du Patrimoine à date : </p>
-        <strong className="finalValue">
-          {Math.round(patrimoineCalcul).toLocaleString()}{" "}
-        </strong>{" "}
-        Ariary
+        <div className="mt-4 mb-4">
+          <Button onClick={calculatePatrimoineCalcul}>
+            Mise à jour Patrimoine
+          </Button>
+        </div>
+        <div className="calcResult">
+          <p>Valeur du Patrimoine à date : </p>
+          <strong className="finalValue">
+            {Math.round(patrimoineCalcul).toLocaleString()}{" "}
+          </strong>{" "}
+          Ariary
+        </div>
       </div>
     </>
   );

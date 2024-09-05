@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Table from "react-bootstrap/Table";
-import DatePicker from "react-datepicker";
 import Button from "react-bootstrap/Button";
 import "react-datepicker/dist/react-datepicker.css";
 import "../App.css";
@@ -20,7 +19,7 @@ export default function possessionsTable() {
     tauxAmortissement: "",
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:5001/possession");

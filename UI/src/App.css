@@ -15,7 +15,18 @@
 }
 .create-button {
   display: flex;
-
   margin-bottom: 4vh;
   margin-top: 4vh;
+}
+.menu-back {
+  background: url("../src/assets/retour.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0 2vh 0;
+}
+.calcul-container {
+  height: 100vh;
+  width: 100%;
 }

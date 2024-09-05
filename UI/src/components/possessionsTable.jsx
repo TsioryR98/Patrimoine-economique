@@ -7,6 +7,7 @@ import "../App.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 export default function possessionsTable() {
   const [listPossession, setListPossession] = useState([]);
@@ -103,8 +104,11 @@ export default function possessionsTable() {
   return (
     <>
       <div className="p-4">
+        <Link to="/">
+          <div className="menu-back"></div>
+        </Link>
         <h1>PATRIMOINE</h1>
-        <h4>Liste de Patrimoines</h4>
+        <h4> Possession List </h4>
         <div className="create-button">
           <Button variant="success" onClick={handleSubmit}>
             Create Patrimoine
@@ -231,10 +235,10 @@ export default function possessionsTable() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Annuler
+            Cancel
           </Button>
           <Button variant="primary" onClick={handleSubmitEdit}>
-            Enregistrer
+            Save
           </Button>
         </Modal.Footer>
       </Modal>

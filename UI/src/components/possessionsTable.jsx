@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
-export default function possessionsTable() {
+export default function PossessionsTable() {
   const [listPossession, setListPossession] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPossession, setSelectedPossession] = useState({
@@ -89,6 +89,30 @@ export default function possessionsTable() {
     }));
   };
 
+  // Handler functions for specific fields
+  const handleLibelleChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, libelle: e.target.value });
+  };
+
+  const handleValeurChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, valeur: e.target.value });
+  };
+
+  const handleDateDebutChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, dateDebut: e.target.value });
+  };
+
+  const handleDateFinChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, dateFin: e.target.value });
+  };
+
+  const handleTauxAmortissementChange = (e) => {
+    setSelectedPossession({
+      ...selectedPossession,
+      tauxAmortissement: e.target.value,
+    });
+  };
+
   const handleSubmitEdit = async () => {
     try {
       await axios.put(
@@ -160,7 +184,6 @@ export default function possessionsTable() {
                   {item.tauxAmortissement ? item.tauxAmortissement + "%" : "0%"}
                 </td>
                 <td>{item.valeurActuelle}</td>
-                {/*action */}
                 <td className="text-center action">
                   <Button
                     variant="primary"
@@ -189,7 +212,6 @@ export default function possessionsTable() {
           </tbody>
         </Table>
       </div>
-      {/* Modal UPdate*/}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Éditer la Possession</Modal.Title>
@@ -201,8 +223,8 @@ export default function possessionsTable() {
               <Form.Control
                 type="text"
                 name="libelle"
-                value={selectedPossession.valeur}
-                onChange={handleInputChange}
+                value={selectedPossession.libelle}
+                onChange={handleLibelleChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formValeur">
@@ -211,7 +233,7 @@ export default function possessionsTable() {
                 type="number"
                 name="valeur"
                 value={selectedPossession.valeur}
-                onChange={handleInputChange}
+                onChange={handleValeurChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formDateDebut">
@@ -220,7 +242,7 @@ export default function possessionsTable() {
                 type="date"
                 name="dateDebut"
                 value={selectedPossession.dateDebut.split("T")[0]}
-                onChange={handleInputChange}
+                onChange={handleDateDebutChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formDateFin">
@@ -233,7 +255,7 @@ export default function possessionsTable() {
                     ? selectedPossession.dateFin.split("T")[0]
                     : ""
                 }
-                onChange={handleInputChange}
+                onChange={handleDateFinChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formTaux">
@@ -242,7 +264,7 @@ export default function possessionsTable() {
                 type="number"
                 name="tauxAmortissement"
                 value={selectedPossession.tauxAmortissement}
-                onChange={handleInputChange}
+                onChange={handleTauxAmortissementChange}
               />
             </Form.Group>
           </Form>

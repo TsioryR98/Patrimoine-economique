@@ -201,9 +201,8 @@ export default function possessionsTable() {
               <Form.Control
                 type="text"
                 name="libelle"
-                value={selectedPossession.libelle}
+                value={selectedPossession.valeur}
                 onChange={handleInputChange}
-                placeholder="Entrez le libellé"
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formValeur">

@@ -46,7 +46,7 @@ export default function possessionsTable() {
           possess.libelle === libelle
             ? {
                 ...possess,
-                dateFin: new Date(data.possession.dateFin).toLocaleDateString(),
+                dateFin: new Date().toISOString(),
               }
             : possess
         )
@@ -95,6 +95,9 @@ export default function possessionsTable() {
 
       setShowEditModal(false);
       alert("Possession modifiée avec succès!");
+      const response = await fetch("http://localhost:5001/possession");
+      const data = await response.json();
+      setListPossession(data);
     } catch (error) {
       console.error("Erreur lors de la modification de la possession:", error);
       alert("Erreur lors de la modification de la possession.");

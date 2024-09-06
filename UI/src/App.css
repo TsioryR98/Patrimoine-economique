@@ -1,14 +1,15 @@
 #root {
   width: 100%;
-  font-size: 16px;
+  font-size: 0.98rem;
 }
+
 .dateSelect {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 .finalValue {
-  font-size: xx-large;
+  font-size: 1.25rem;
 }
 .container {
   width: 100%;
@@ -18,6 +19,13 @@
   margin-bottom: 4vh;
   margin-top: 4vh;
 }
+.patrimoine-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 110vh;
+}
+
 .menu-back {
   background: url("../src/assets/retour.jpeg");
   background-size: cover;
@@ -27,6 +35,16 @@
   margin: 0 0 2vh 0;
 }
 .calcul-container {
-  height: 100vh;
+  display: flex;
   width: 100%;
+  flex-direction: column;
+}
+.datePicker {
+  width: 100%;
+  justify-content: space-around;
+}
+.chart-container {
+  width: 100%;
+  height: 200px;
+  position: relative;
 }

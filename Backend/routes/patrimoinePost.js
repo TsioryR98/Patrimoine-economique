@@ -2,8 +2,9 @@ import express from "express";
 import path from "path";
 import { readFile, writeFile } from "../../data/index.js";
 import { fileURLToPath } from "url";
-import Flux from "../../models/possessions/Flux.js";
-import Possession from "../../models/possessions/Possession.js";
+import Flux from "../../UI/src/models/possessions/Flux.js";
+import Possession from "../../UI/src/models/possessions/Possession.js";
+import Patrimoine from "../../UI/src/models/Patrimoine.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,212 +20,76 @@ const getDataBase = async () => {
   return dataBase.status === "OK" ? dataBase.data : null;
 };
 
-// ENDPOINT GET
-router.get("/", async (req, res) => {
+// ENDPOINT POST /range
+router.post("/range", async (req, res) => {
   try {
-    const data = await getDataBase();
-    if (data) {
-      const actualDay = new Date();
-      const processedPossessions = data[1].data.possessions.map((item) => {
-        const possession = item.jour
-          ? new Flux(
-              item.possesseur,
-              item.libelle,
-              item.valeurConstante,
-              new Date(item.dateDebut),
-              item.dateFin ? new Date(item.dateFin) : null,
-              item.tauxAmortissement,
-              item.jour
-            )
-          : new Possession(
-              item.possesseur,
-              item.libelle,
-              item.valeur,
-              new Date(item.dateDebut),
-              item.dateFin ? new Date(item.dateFin) : null,
-              item.tauxAmortissement
-            );
+    const { dateDebut, dateFin, type, jour } = req.body;
 
-        const actualValue = possession.getValeur(actualDay);
-        return {
-          libelle: item.libelle,
-          valeur: item.valeur,
-          dateDebut: item.dateDebut,
-          dateFin: item.dateFin ? item.dateFin : null,
-          tauxAmortissement: item.tauxAmortissement,
-          valeurActuelle: Math.round(actualValue),
-        };
-      });
-
-      res.json(processedPossessions);
-    } else {
-      handleError(res, "Erreur de lecture des données");
+    if (!dateDebut || !dateFin || !type || !jour) {
+      return res.status(400).json({ message: "Paramètres manquants" });
     }
-  } catch (error) {
-    handleError(res, "Erreur lors de la lecture des données", error);
-  }
-});
 
-//ENDPOINT POST
-router.post("/", async (req, res) => {
-  try {
-    const newPossession = req.body;
-    const data = await getDataBase();
+    const startDate = new Date(dateDebut);
+    const endDate = new Date(dateFin);
 
-    if (data) {
-      data[1].data.possessions.push(newPossession);
-      const writeInData = await writeFile(dataBasePath, data);
-      if (writeInData.status === "OK") {
-        res.status(201).json(newPossession);
-      } else {
-        handleError(
-          res,
-          "Erreur lors de l'écriture des données",
-          writeInData.error
-        );
-      }
-    } else {
-      handleError(res, "Erreur de lecture des données");
+    if (isNaN(startDate) || isNaN(endDate)) {
+      return res.status(400).json({ message: "Dates invalides" });
     }
-  } catch (error) {
-    handleError(res, "Erreur lors de la lecture des données", error);
-  }
-});
 
-//ENDPOINT POST /CREATE
-router.post("/create", async (req, res) => {
-  const { libelle, valeur, dateDebut, tauxAmortissement, possesseur } =
-    req.body;
-  try {
-    const data = await getDataBase();
-
-    if (data) {
-      data[1].data.possessions.push({
-        possesseur,
-        libelle,
-        valeur,
-        dateDebut,
-        dateFin: null,
-        tauxAmortissement,
-      });
-
-      const dataWrite = await writeFile(dataBasePath, data);
-      if (dataWrite.status === "OK") {
-        res.status(201).json({ message: "Création OK", possession: req.body });
-      } else {
-        handleError(res, "Échec de l'écriture des données", dataWrite.error);
-      }
-    } else {
-      handleError(res, "Échec de la lecture des données");
-    }
-  } catch (error) {
-    handleError(res, "Erreur lors de la lecture des données", error);
-  }
-});
-
-//ENDPOINT /:LIBELLE for update
-router.put("/:libelle", async (req, res) => {
-  try {
-    const { libelle } = req.params;
-    const { valeur, dateDebut, dateFin, tauxAmortissement } = req.body;
-    const data = await getDataBase();
-
-    if (data) {
-      const possessionIndex = data[1].data.possessions.findIndex(
-        (p) => p.libelle === libelle
-      );
-
-      if (possessionIndex !== -1) {
-        const updatedPossession = {
-          ...data[1].data.possessions[possessionIndex],
-          valeur,
-          dateDebut,
-          dateFin: dateFin ? dateFin : null,
-          tauxAmortissement,
-        };
-        data[1].data.possessions[possessionIndex] = updatedPossession;
-        const writeStatus = await writeFile(dataBasePath, data);
-
-        if (writeStatus.status === "OK") {
-          res.status(200).json(updatedPossession);
-        } else {
-          handleError(res, "Erreur lors de l'enregistrement des modifications");
-        }
-      } else {
-        res.status(404).json({ message: "Possession introuvable" });
-      }
-    } else {
-      handleError(res, "Erreur de lecture des données");
-    }
-  } catch (error) {
-    handleError(res, "Erreur lors de la mise à jour de la possession", error);
-  }
-});
-
-// ENDPOINT DELETE /:libelle
-
-router.delete("/:libelle", async (req, res) => {
-  const { libelle } = req.params;
-
-  try {
     const data = await getDataBase();
     if (!data) {
       return handleError(res, "Données non trouvées");
     }
 
-    const patrimoine = data.find((item) => item.model === "Patrimoine");
-    if (!patrimoine) {
-      return handleError(res, "Modèle Patrimoine introuvable");
+    const patrimoineData = data.find((d) => d.model === "Patrimoine");
+    if (!patrimoineData) {
+      return res.status(404).json({ message: "Modèle Patrimoine introuvable" });
     }
 
-    const possessions = patrimoine.data.possessions;
-    const index = possessions.findIndex((p) => p.libelle === libelle);
-
-    if (index !== -1) {
-      possessions.splice(index, 1);
-
-      const writeResult = await writeFile(dataBasePath, data);
-      if (writeResult.status === "OK") {
-        res.json({ message: "Possession supprimée avec succès" });
-      } else {
-        handleError(
-          res,
-          "Erreur lors de la sauvegarde des données",
-          writeResult.error
-        );
-      }
-    } else {
-      res.status(404).json({ message: "Possession non trouvée" });
-    }
-  } catch (error) {
-    handleError(res, "Erreur lors de la suppression de la possession", error);
-  }
-});
-
-// ENDPOINT CLOSE
-router.patch("/:libelle/close", async (req, res) => {
-  const { libelle } = req.params;
-  try {
-    const data = await getDataBase();
-    if (!data) {
-      return handleError(res, "Données non trouvées");
-    }
-    const possession = data[1].data.possessions.find(
-      (possess) => possess.libelle === libelle
-    );
-    possession.dateFin = new Date();
-    await writeFile(dataBasePath, data);
-
-    res.status(200).json({
-      message: "Fermeture avec succès",
-      possession: {
-        ...possession,
-        dateFin: possession.dateFin.toISOString(),
-      },
+    const possessions = patrimoineData.data.possessions.map((p) => {
+      return p.jour
+        ? new Flux(
+            p.possesseur,
+            p.libelle,
+            p.valeurConstante,
+            new Date(p.dateDebut),
+            p.dateFin ? new Date(p.dateFin) : null,
+            p.tauxAmortissement,
+            p.jour
+          )
+        : new Possession(
+            p.possesseur,
+            p.libelle,
+            p.valeur,
+            new Date(p.dateDebut),
+            p.dateFin ? new Date(p.dateFin) : null,
+            p.tauxAmortissement
+          );
     });
+
+    const patrimoine = new Patrimoine(
+      patrimoineData.data.possesseur.nom,
+      possessions
+    );
+
+    let currentDate = startDate;
+    const results = [];
+
+    while (currentDate <= endDate) {
+      const valeur = patrimoine.getValeur(currentDate);
+      results.push({ date: currentDate.toISOString().split("T")[0], valeur });
+
+      if (type === "month") {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+      } else {
+        currentDate.setDate(currentDate.getDate() + jour);
+      }
+    }
+
+    res.json(results);
   } catch (error) {
-    handleError(res, "Erreur lors de la fermeture", error);
+    handleError(res, "Erreur lors de la récupération des données", error);
   }
 });
 
-export { router as postRouter };
+export { router as patrimoineRouter };

@@ -77,12 +77,12 @@ export default function possessionsTable() {
 
   const handleEdit = (possession) => {
     setSelectedPossession(possession);
+    console.log("Editing possession:", possession);
     setShowEditModal(true);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log("Input change:", { name, value });
     setSelectedPossession((prevState) => ({
       ...prevState,
       [name]: value,

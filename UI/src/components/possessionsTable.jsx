@@ -82,7 +82,10 @@ export default function possessionsTable() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setSelectedPossession({ ...selectedPossession, [name]: value });
+    setSelectedPossession((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleSubmitEdit = async () => {
@@ -199,7 +202,7 @@ export default function possessionsTable() {
                 name="libelle"
                 value={selectedPossession.libelle}
                 onChange={handleInputChange}
-                //disabled
+                placeholder="Entrez le libellé"
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formValeur">

@@ -23,7 +23,9 @@ export default function possessionsTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5001/possession");
+        const response = await fetch(
+          "https://patrimoine-backend-j6eo.onrender.com/possession"
+        );
         const data = await response.json();
         setListPossession(data);
       } catch (error) {
@@ -40,7 +42,9 @@ export default function possessionsTable() {
 
   const handleClose = async (libelle) => {
     try {
-      await axios.patch(`http://localhost:5001/possession/${libelle}/close`);
+      await axios.patch(
+        `https://patrimoine-backend-j6eo.onrender.com/possession/${libelle}/close`
+      );
       setListPossession((lastListPossession) =>
         lastListPossession.map((possess) =>
           possess.libelle === libelle
@@ -60,7 +64,9 @@ export default function possessionsTable() {
 
   const handleDelete = async (libelle) => {
     try {
-      await axios.delete(`http://localhost:5001/possession/${libelle}`);
+      await axios.delete(
+        `https://patrimoine-backend-j6eo.onrender.com/possession/${libelle}`
+      );
       setListPossession((lastListPossession) =>
         lastListPossession.filter((possess) => possess.libelle !== libelle)
       );
@@ -82,7 +88,7 @@ export default function possessionsTable() {
   const handleSubmitEdit = async () => {
     try {
       await axios.put(
-        `http://localhost:5001/possession/${selectedPossession.libelle}`,
+        `https://patrimoine-backend-j6eo.onrender.com/possession/${selectedPossession.libelle}`,
         selectedPossession
       );
       setListPossession((lastListPossession) =>
@@ -95,7 +101,9 @@ export default function possessionsTable() {
 
       setShowEditModal(false);
       alert("Possession modifiée avec succès!");
-      const response = await fetch("http://localhost:5001/possession");
+      const response = await fetch(
+        "https://patrimoine-backend-j6eo.onrender.com/possession"
+      );
       const data = await response.json();
       setListPossession(data);
     } catch (error) {

@@ -5,7 +5,13 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 5001;
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://patrimoine-backend-j6eo.onrender.com",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type, Authorization"],
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -16,5 +22,5 @@ app.use("/possession", possessionRouter);
 app.use("/patrimoine", patrimoineRouter);
 
 app.listen(port, () => {
-  console.log(`appServer is running on http://localhost:${port}`);
+  console.log(`appServer is running on ${port}`);
 });

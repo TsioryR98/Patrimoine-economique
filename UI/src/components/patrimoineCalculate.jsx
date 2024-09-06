@@ -20,7 +20,9 @@ const patrimoineCalculates = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5001/possession");
+        const response = await fetch(
+          "https://patrimoine-backend-j6eo.onrender.com/possession"
+        );
         const data = await response.json();
         setPossessions(data);
       } catch (error) {

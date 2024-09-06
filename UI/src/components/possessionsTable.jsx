@@ -82,6 +82,7 @@ export default function possessionsTable() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log("Input change:", { name, value });
     setSelectedPossession((prevState) => ({
       ...prevState,
       [name]: value,

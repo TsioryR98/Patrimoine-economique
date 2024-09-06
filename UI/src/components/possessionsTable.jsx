@@ -199,7 +199,7 @@ export default function possessionsTable() {
                 name="libelle"
                 value={selectedPossession.libelle}
                 onChange={handleInputChange}
-                disabled
+                //disabled
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formValeur">

@@ -23,7 +23,9 @@ export default function PossessionsTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/possession");
+        const response = await fetch(
+          "https://patrimoine-economique-6jal.onrender.com/possession"
+        );
         const data = await response.json();
         setListPossession(data);
       } catch (error) {
@@ -40,7 +42,9 @@ export default function PossessionsTable() {
 
   const handleClose = async (libelle) => {
     try {
-      await axios.patch(`http://localhost:5000/possession/${libelle}/close`);
+      await axios.patch(
+        `https://patrimoine-economique-6jal.onrender.com/possession/${libelle}/close`
+      );
       setListPossession((lastListPossession) =>
         lastListPossession.map((possess) =>
           possess.libelle === libelle
@@ -60,7 +64,9 @@ export default function PossessionsTable() {
 
   const handleDelete = async (libelle) => {
     try {
-      await axios.delete(`http://localhost:5000/possession/${libelle}`);
+      await axios.delete(
+        `https://patrimoine-economique-6jal.onrender.com/possession/${libelle}`
+      );
       setListPossession((lastListPossession) =>
         lastListPossession.filter((possess) => possess.libelle !== libelle)
       );
@@ -110,7 +116,7 @@ export default function PossessionsTable() {
   const handleSubmitEdit = async () => {
     try {
       await axios.put(
-        `http://localhost:5000/possession/${selectedPossession.libelle}`,
+        `https://patrimoine-economique-6jal.onrender.com/possession/${selectedPossession.libelle}`,
         selectedPossession
       );
       setListPossession((lastListPossession) =>
@@ -123,7 +129,9 @@ export default function PossessionsTable() {
 
       setShowEditModal(false);
       alert("Possession modifiée avec succès!");
-      const response = await fetch("http://localhost:5000/possession");
+      const response = await fetch(
+        "https://patrimoine-economique-6jal.onrender.com/possession"
+      );
       const data = await response.json();
       setListPossession(data);
     } catch (error) {

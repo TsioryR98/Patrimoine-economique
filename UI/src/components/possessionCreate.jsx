@@ -28,7 +28,10 @@ const PatrimonyManagement = () => {
     };
 
     try {
-      await axios.post("http://localhost:5000/possession/create", newInfo);
+      await axios.post(
+        "https://patrimoine-economique-6jal.onrender.com/possession/create",
+        newInfo
+      );
       alert("Possession créée avec succès!");
       window.close(); //fermeture de page creation apres create
     } catch (error) {

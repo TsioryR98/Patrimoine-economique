@@ -19,7 +19,9 @@ const PatrimoineCalculates = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/possession");
+        const response = await fetch(
+          "https://patrimoine-economique-6jal.onrender.com/possession"
+        );
         const data = await response.json();
         setPossessions(data);
       } catch (error) {

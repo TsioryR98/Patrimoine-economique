@@ -29,7 +29,7 @@ const PatrimonyManagement = () => {
 
     try {
       await axios.post(
-        "https://patrimoinebackend.onrender.com/possession/create",
+        "https://patrimoine-economique-6jal.onrender.com/possession/create",
         newInfo
       );
       alert("Possession créée avec succès!");

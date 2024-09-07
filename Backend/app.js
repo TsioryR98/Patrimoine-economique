@@ -5,16 +5,7 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 5001;
-app.use(
-  cors({
-    origin: [
-      "https://patrimoine-economique-6jal.onrender.com",
-      "https://patrimoine-frontend-8y0i.onrender.com",
-    ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 

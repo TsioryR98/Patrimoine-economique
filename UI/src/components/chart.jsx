@@ -46,7 +46,7 @@ export default function LineChart() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://patrimoine-economique-6jal.onrender.com/patrimoine/range",
+        "https://patrimoinebackend.onrender.com/patrimoine/range",
         {
           dateDebut: dateDebut.toISOString().split("T")[0],
           dateFin: dateFin.toISOString().split("T")[0],

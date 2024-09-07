@@ -24,7 +24,7 @@ export default function PossessionsTable() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://patrimoine-economique-6jal.onrender.com/possession"
+          "https://patrimoinebackend.onrender.com/possession"
         );
         const data = await response.json();
         setListPossession(data);
@@ -43,7 +43,7 @@ export default function PossessionsTable() {
   const handleClose = async (libelle) => {
     try {
       await axios.patch(
-        `https://patrimoine-economique-6jal.onrender.com/possession/${libelle}/close`
+        `https://patrimoinebackend.onrender.com/possession/${libelle}/close`
       );
       setListPossession((lastListPossession) =>
         lastListPossession.map((possess) =>
@@ -65,7 +65,7 @@ export default function PossessionsTable() {
   const handleDelete = async (libelle) => {
     try {
       await axios.delete(
-        `https://patrimoine-economique-6jal.onrender.com/possession/${libelle}`
+        `https://patrimoinebackend.onrender.com/possession/${libelle}`
       );
       setListPossession((lastListPossession) =>
         lastListPossession.filter((possess) => possess.libelle !== libelle)
@@ -116,7 +116,7 @@ export default function PossessionsTable() {
   const handleSubmitEdit = async () => {
     try {
       await axios.put(
-        `https://patrimoine-economique-6jal.onrender.com/possession/${selectedPossession.libelle}`,
+        `https://patrimoinebackend.onrender.com/possession/${selectedPossession.libelle}`,
         selectedPossession
       );
       setListPossession((lastListPossession) =>
@@ -130,7 +130,7 @@ export default function PossessionsTable() {
       setShowEditModal(false);
       alert("Possession modifiée avec succès!");
       const response = await fetch(
-        "https://patrimoine-economique-6jal.onrender.com/possession"
+        "https://patrimoinebackend.onrender.com/possession"
       );
       const data = await response.json();
       setListPossession(data);

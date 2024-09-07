@@ -8,8 +8,8 @@ const port = process.env.PORT || 5001;
 app.use(
   cors({
     origin: [
-      "https://patrimoine-economique-6jal.onrender.com",
-      "https://patrimoine-frontend-8y0i.onrender.com",
+      "https://patrimoinefront.onrender.com",
+      "https://patrimoinebackend.onrender.com",
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],

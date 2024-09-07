@@ -23,9 +23,7 @@ export default function PossessionsTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://patrimoine-economique-6jal.onrender.com/possession"
-        );
+        const response = await fetch("http://localhost:5000/possession");
         const data = await response.json();
         setListPossession(data);
       } catch (error) {
@@ -42,9 +40,7 @@ export default function PossessionsTable() {
 
   const handleClose = async (libelle) => {
     try {
-      await axios.patch(
-        `https://patrimoine-economique-6jal.onrender.com/possession/${libelle}/close`
-      );
+      await axios.patch(`http://localhost:5000/possession/${libelle}/close`);
       setListPossession((lastListPossession) =>
         lastListPossession.map((possess) =>
           possess.libelle === libelle
@@ -64,9 +60,7 @@ export default function PossessionsTable() {
 
   const handleDelete = async (libelle) => {
     try {
-      await axios.delete(
-        `https://patrimoine-economique-6jal.onrender.com/possession/${libelle}`
-      );
+      await axios.delete(`http://localhost:5000/possession/${libelle}`);
       setListPossession((lastListPossession) =>
         lastListPossession.filter((possess) => possess.libelle !== libelle)
       );
@@ -116,7 +110,7 @@ export default function PossessionsTable() {
   const handleSubmitEdit = async () => {
     try {
       await axios.put(
-        `https://patrimoine-economique-6jal.onrender.com/possession/${selectedPossession.libelle}`,
+        `http://localhost:5000/possession/${selectedPossession.libelle}`,
         selectedPossession
       );
       setListPossession((lastListPossession) =>
@@ -129,9 +123,7 @@ export default function PossessionsTable() {
 
       setShowEditModal(false);
       alert("Possession modifiée avec succès!");
-      const response = await fetch(
-        "https://patrimoine-economique-6jal.onrender.com/possession"
-      );
+      const response = await fetch("http://localhost:5000/possession");
       const data = await response.json();
       setListPossession(data);
     } catch (error) {
@@ -142,12 +134,11 @@ export default function PossessionsTable() {
 
   return (
     <>
-      <div className="p-4">
+      <div className="table-container p-4" style={{ fontSize: "18px" }}>
         <Link to="/">
           <div className="menu-back"></div>
         </Link>
-        <h1>PATRIMOINE</h1>
-        <h4> Possession List </h4>
+        <h2> Possession List </h2>
         <div className="create-button">
           <Button variant="success" onClick={handleSubmit}>
             Create Patrimoine

@@ -1,6 +1,6 @@
 #root {
   width: 100%;
-  font-size: 0.98rem;
+  font-size: 0.95rem;
 }
 
 .dateSelect {
@@ -9,7 +9,7 @@
   justify-content: space-between;
 }
 .finalValue {
-  font-size: 1.25rem;
+  font-size: 1.45rem;
 }
 .container {
   width: 100%;
@@ -20,10 +20,8 @@
   margin-top: 4vh;
 }
 .patrimoine-container {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  height: 110vh;
+  height: 100vh;
 }
 
 .menu-back {
@@ -32,19 +30,27 @@
   background-repeat: no-repeat;
   width: 2rem;
   height: 2rem;
-  margin: 0 0 2vh 0;
+  margin: 0 0 10px 0;
 }
 .calcul-container {
   display: flex;
   width: 100%;
   flex-direction: column;
+  height: 35vh;
+  padding: 20px;
+  margin-top: 28vh;
+  justify-content: center;
+  align-items: center;
 }
+
 .datePicker {
   width: 100%;
   justify-content: space-around;
 }
 .chart-container {
   width: 100%;
-  height: 200px;
+  height: 450px;
   position: relative;
+  padding: 15px;
+  margin-bottom: 20px;
 }

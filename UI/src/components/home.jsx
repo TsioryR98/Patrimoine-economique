@@ -36,7 +36,7 @@ const homePage = () => {
 
         <div className="home-page">
           <h2>WELCOME TO YOUR PERSONNAL ASSETS MANAGER</h2>
-          <p>
+          <p style={{ fontSize: "18px" }}>
             Build your wealth with confidence and achieve your financial goals
             through effective management. Your assets deserve the best care.
           </p>

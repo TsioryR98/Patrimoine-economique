@@ -17,6 +17,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "chartjs-adapter-date-fns";
+import "../App.css";
 
 ChartJS.register(...registerables, Filler);
 
@@ -46,7 +47,7 @@ export default function LineChart() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://patrimoine-economique-6jal.onrender.com/patrimoine/range",
+        "http://localhost:5000/patrimoine/range",
         {
           dateDebut: dateDebut.toISOString().split("T")[0],
           dateFin: dateFin.toISOString().split("T")[0],
@@ -91,83 +92,85 @@ export default function LineChart() {
   };
 
   return (
-    <div className="container-fluid">
-      <h2 className="text-center mb-4">Patrimoine Chart</h2>
-      <div className="row mb-3">
-        <div className="col-md-4">
-          <label className="form-label">Date Debut:</label>
-          <DatePicker
-            selected={dateDebut}
-            onChange={(date) => setDateDebut(date)}
-            dateFormat="dd/MM/yyyy"
-            className="form-control"
-            placeholderText="Selectionnez une date"
-          />
+    <>
+      <div className="calcul p-2">
+        <h2 className="text-center mb-4">Patrimoine Chart</h2>
+        <div className="row mb-3">
+          <div className="col-md-4">
+            <label className="form-label">Date Debut:</label>
+            <DatePicker
+              selected={dateDebut}
+              onChange={(date) => setDateDebut(date)}
+              dateFormat="dd/MM/yyyy"
+              className="form-control"
+              placeholderText="Selectionnez une date"
+            />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">Date Fin:</label>
+            <DatePicker
+              selected={dateFin}
+              onChange={(date) => setDateFin(date)}
+              dateFormat="dd/MM/yyyy"
+              className="form-control"
+              placeholderText="Selectionnez une date"
+            />
+          </div>
+          <div className="col-md-4 align-center justify-center d-flex">
+            <label className="form-label">Jour:</label>
+            <select
+              value={jour}
+              onChange={(e) => setJour(Number(e.target.value))}
+              className="form-select w-25"
+            >
+              {[1, 7, 30].map((day) => (
+                <option key={day} value={day}>
+                  {day} j
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="col-md-4">
-          <label className="form-label">Date Fin:</label>
-          <DatePicker
-            selected={dateFin}
-            onChange={(date) => setDateFin(date)}
-            dateFormat="dd/MM/yyyy"
-            className="form-control"
-            placeholderText="Selectionnez une date"
-          />
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">Jour:</label>
-          <select
-            value={jour}
-            onChange={(e) => setJour(Number(e.target.value))}
-            className="form-select"
+        <div className="d-flex justify-content-center mb-3">
+          <button
+            onClick={handleFetchData}
+            className="btn btn-primary"
+            disabled={loading}
           >
-            {[1, 7, 30].map((day) => (
-              <option key={day} value={day}>
-                {day} jours
-              </option>
-            ))}
-          </select>
+            {loading ? "Chargement..." : "Valider"}
+          </button>
         </div>
-      </div>
-      <div className="d-flex justify-content-center mb-3">
-        <button
-          onClick={handleFetchData}
-          className="btn btn-primary"
-          disabled={loading}
-        >
-          {loading ? "Chargement..." : "Valider"}
-        </button>
-      </div>
-      <div className="chart-container">
-        <Line
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                type: "linear", // Axe x linéaire pour les valeurs
-                position: "bottom",
+        <div className="chart-container">
+          <Line
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  type: "linear", // Axe x linéaire pour les valeurs
+                  position: "bottom",
+                },
+                y: {
+                  type: "time", // Axe y pour les dates
+                },
               },
-              y: {
-                type: "time", // Axe y pour les dates
-              },
-            },
-            plugins: {
-              legend: {
-                position: "top",
-              },
-              tooltip: {
-                callbacks: {
-                  label: function (tooltipItem) {
-                    return `Date: ${tooltipItem.raw}`;
+              plugins: {
+                legend: {
+                  position: "top",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (tooltipItem) {
+                      return `Date: ${tooltipItem.raw}`;
+                    },
                   },
                 },
               },
-            },
-          }}
-          data={data.labels ? data : defaultData}
-        />
+            }}
+            data={data.labels ? data : defaultData}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

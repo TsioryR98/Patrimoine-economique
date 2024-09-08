@@ -7,8 +7,9 @@ import "../App.css";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
-export default function possessionsTable() {
+export default function PossessionsTable() {
   const [listPossession, setListPossession] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPossession, setSelectedPossession] = useState({
@@ -22,7 +23,7 @@ export default function possessionsTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5001/possession");
+        const response = await fetch("http://localhost:5000/possession");
         const data = await response.json();
         setListPossession(data);
       } catch (error) {
@@ -39,13 +40,13 @@ export default function possessionsTable() {
 
   const handleClose = async (libelle) => {
     try {
-      await axios.patch(`http://localhost:5001/possession/${libelle}/close`);
+      await axios.patch(`http://localhost:5000/possession/${libelle}/close`);
       setListPossession((lastListPossession) =>
         lastListPossession.map((possess) =>
           possess.libelle === libelle
             ? {
                 ...possess,
-                dateFin: new Date(data.possession.dateFin).toLocaleDateString(),
+                dateFin: new Date().toISOString(),
               }
             : possess
         )
@@ -59,7 +60,7 @@ export default function possessionsTable() {
 
   const handleDelete = async (libelle) => {
     try {
-      await axios.delete(`http://localhost:5001/possession/${libelle}`);
+      await axios.delete(`http://localhost:5000/possession/${libelle}`);
       setListPossession((lastListPossession) =>
         lastListPossession.filter((possess) => possess.libelle !== libelle)
       );
@@ -70,18 +71,46 @@ export default function possessionsTable() {
 
   const handleEdit = (possession) => {
     setSelectedPossession(possession);
+    console.log("Editing possession:", possession);
     setShowEditModal(true);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setSelectedPossession({ ...selectedPossession, [name]: value });
+    setSelectedPossession((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  // Handler functions for specific fields
+  const handleLibelleChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, libelle: e.target.value });
+  };
+
+  const handleValeurChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, valeur: e.target.value });
+  };
+
+  const handleDateDebutChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, dateDebut: e.target.value });
+  };
+
+  const handleDateFinChange = (e) => {
+    setSelectedPossession({ ...selectedPossession, dateFin: e.target.value });
+  };
+
+  const handleTauxAmortissementChange = (e) => {
+    setSelectedPossession({
+      ...selectedPossession,
+      tauxAmortissement: e.target.value,
+    });
   };
 
   const handleSubmitEdit = async () => {
     try {
       await axios.put(
-        `http://localhost:5001/possession/${selectedPossession.libelle}`,
+        `http://localhost:5000/possession/${selectedPossession.libelle}`,
         selectedPossession
       );
       setListPossession((lastListPossession) =>
@@ -94,6 +123,9 @@ export default function possessionsTable() {
 
       setShowEditModal(false);
       alert("Possession modifiée avec succès!");
+      const response = await fetch("http://localhost:5000/possession");
+      const data = await response.json();
+      setListPossession(data);
     } catch (error) {
       console.error("Erreur lors de la modification de la possession:", error);
       alert("Erreur lors de la modification de la possession.");
@@ -102,74 +134,75 @@ export default function possessionsTable() {
 
   return (
     <>
-      <h1>PATRIMOINE</h1>
-      <h4>Liste de Patrimoines</h4>
-      <div className="create-button">
-        <Button variant="success" onClick={handleSubmit}>
-          Create Patrimoine
-        </Button>
-      </div>
-      <Table striped bordered hover className="text-center" variant="light">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Libelle</th>
-            <th>Valeur initiale</th>
-            <th>Date de début</th>
-            <th>Date de fin</th>
-            <th>Amortissement</th>
-            <th>valeurActuelle</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listPossession.map((item, index) => (
-            <tr key={index} className="text-center">
-              <td>{index + 1}</td>
-              <td>{item.libelle}</td>
-              <td>{item.valeur}</td>
-              <td className="text-center">
-                {new Date(item.dateDebut).toLocaleDateString()}
-              </td>
-              <td className="text-center">
-                {item.dateFin
-                  ? new Date(item.dateFin).toLocaleDateString()
-                  : "-"}
-              </td>
-              <td className="text-center">
-                {item.tauxAmortissement ? item.tauxAmortissement + "%" : "0%"}
-              </td>
-              <td>{item.valeurActuelle}</td>
-              {/*action */}
-              <td className="text-center action">
-                <Button
-                  variant="primary"
-                  className="me-1"
-                  onClick={() => handleEdit(item)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="warning"
-                  className="me-1"
-                  onClick={() => handleClose(item.libelle)}
-                >
-                  Close
-                </Button>
-                <Button
-                  variant="danger"
-                  className="me-1"
-                  onClick={() => handleDelete(item.libelle)}
-                >
-                  Delete
-                </Button>
-              </td>
+      <div className="table-container p-4" style={{ fontSize: "18px" }}>
+        <Link to="/">
+          <div className="menu-back"></div>
+        </Link>
+        <h2> Possession List </h2>
+        <div className="create-button">
+          <Button variant="success" onClick={handleSubmit}>
+            Create Patrimoine
+          </Button>
+        </div>
+        <Table striped bordered hover className="text-center" variant="light">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Libelle</th>
+              <th>Valeur initiale</th>
+              <th>Date de début</th>
+              <th>Date de fin</th>
+              <th>Amortissement</th>
+              <th>valeurActuelle</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-
-      {/* Modal UPdate*/}
+          </thead>
+          <tbody>
+            {listPossession.map((item, index) => (
+              <tr key={index} className="text-center">
+                <td>{index + 1}</td>
+                <td>{item.libelle}</td>
+                <td>{item.valeur}</td>
+                <td className="text-center">
+                  {new Date(item.dateDebut).toLocaleDateString()}
+                </td>
+                <td className="text-center">
+                  {item.dateFin
+                    ? new Date(item.dateFin).toLocaleDateString()
+                    : "-"}
+                </td>
+                <td className="text-center">
+                  {item.tauxAmortissement ? item.tauxAmortissement + "%" : "0%"}
+                </td>
+                <td>{item.valeurActuelle}</td>
+                <td className="text-center action">
+                  <Button
+                    variant="primary"
+                    className="me-1"
+                    onClick={() => handleEdit(item)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="warning"
+                    className="me-1"
+                    onClick={() => handleClose(item.libelle)}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="danger"
+                    className="me-1"
+                    onClick={() => handleDelete(item.libelle)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Éditer la Possession</Modal.Title>
@@ -182,8 +215,7 @@ export default function possessionsTable() {
                 type="text"
                 name="libelle"
                 value={selectedPossession.libelle}
-                onChange={handleInputChange}
-                disabled
+                onChange={handleLibelleChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formValeur">
@@ -192,7 +224,7 @@ export default function possessionsTable() {
                 type="number"
                 name="valeur"
                 value={selectedPossession.valeur}
-                onChange={handleInputChange}
+                onChange={handleValeurChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formDateDebut">
@@ -201,7 +233,7 @@ export default function possessionsTable() {
                 type="date"
                 name="dateDebut"
                 value={selectedPossession.dateDebut.split("T")[0]}
-                onChange={handleInputChange}
+                onChange={handleDateDebutChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formDateFin">
@@ -214,7 +246,7 @@ export default function possessionsTable() {
                     ? selectedPossession.dateFin.split("T")[0]
                     : ""
                 }
-                onChange={handleInputChange}
+                onChange={handleDateFinChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formTaux">
@@ -223,17 +255,17 @@ export default function possessionsTable() {
                 type="number"
                 name="tauxAmortissement"
                 value={selectedPossession.tauxAmortissement}
-                onChange={handleInputChange}
+                onChange={handleTauxAmortissementChange}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Annuler
+            Cancel
           </Button>
           <Button variant="primary" onClick={handleSubmitEdit}>
-            Enregistrer
+            Save
           </Button>
         </Modal.Footer>
       </Modal>
